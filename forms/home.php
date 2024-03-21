@@ -37,7 +37,7 @@
                 
             }
             
-            echo "<a href='edit.php?Id=$res_id'>Change Profile</a>";
+            echo "<a href='edit.php?Id=$res_id'>Reset Password</a>";
             ?>
 
             <a href="php/logout.php"> <button class="btn">Log Out</button> </a>
@@ -51,14 +51,100 @@
             <div class="box">
                 <p>Hello <b><?php echo $res_Uname ?></b>, Welcome</p>
             </div>
-            <div class="box">
+            <!--<div class="box">
                 <p>Your email is <b><?php echo $res_Email ?></b>.</p>
-            </div>
+            </div>-->
           </div>
           <div class="bottom">
-            <div class="box">
+            <!--<div class="box">
                 <p>And your password is <b><?php echo $res_Password ?> </b>!</p> 
-            </div>
+            </div>-->
+            <head>
+<title>FullCalendar</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
+<script>
+    $(document).ready(function() {
+      var calendarEvents = [
+        // Add existing events 
+      ];
+    
+      $('#calendar').fullCalendar({
+        defaultDate: moment().format('YYYY-MM-DD'),
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: calendarEvents,
+        customButtons: {
+          addButton: {
+            text: 'Add',
+            click: function() {
+              var title = prompt('Title:');
+              var startDate = prompt('Start date (YYYY-MM-DD):');
+              var endDate = prompt('End date(YYYY-MM-DD):');
+              if (title && startDate) {
+                var newEvent = {
+                  title: title,
+                  start: startDate,
+                  end: endDate
+                };
+                calendarEvents.push(newEvent);
+                $('#calendar').fullCalendar('renderEvent', newEvent, true); // Add event in calendar
+              }
+            }
+          },
+          homeButton: {
+            text: 'Home',
+            click: function() {
+              window.location.href = 'register.php'; 
+            }
+          }
+        },
+        header: {
+          left: 'prev,next today addButton,homeButton,editButton,deleteButton',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        eventClick: function(calEvent, jsEvent, view) {
+          // Popup
+          var confirmEdit = confirm('Edit event?');
+          if (confirmEdit) {
+            // Edit
+            var newTitle = prompt('New title:', calEvent.title);
+            if (newTitle) {
+              calEvent.title = newTitle;
+              $('#calendar').fullCalendar('updateEvent', calEvent);
+            }
+          }
+    
+          var confirmDelete = confirm('Delete event?');
+          if (confirmDelete) {
+            // Delete
+            $('#calendar').fullCalendar('removeEvents', calEvent._id);
+          }
+        }
+      });
+    });
+    </script>
+<style>
+  a{
+    text-decoration: none;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  #calendar {
+    max-width: 900px;
+    margin: 40px auto;
+  }
+  .fc-button {
+    margin: 2px;
+  }
+</style>
+<div id="calendar"></div>
           </div>
        </div>
 
